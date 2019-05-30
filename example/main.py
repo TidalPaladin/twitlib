@@ -150,9 +150,13 @@ def main(argv):
         elif FLAGS.follow:
             logging.info('follow=%s', FLAGS.follow)
             stream(follow=FLAGS.follow)
+
+        # Drop to IPython REPL if no flags
         else:
-            logging.error('Nothing to stream, exiting...')
-            return
+            logging.info('Nothing to stream, dropping to REPL.')
+            import IPython
+            IPython.embed()
+            sys.exit()
 
 if __name__ == '__main__':
   app.run(main)

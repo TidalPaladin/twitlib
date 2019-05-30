@@ -1,3 +1,4 @@
 FROM python:3.7-slim-stretch
-ADD twitlib /twitlib
-RUN pip install python-twitter absl-py
+RUN mkdir -p /twitlib
+ADD ./*.py /twitlib
+RUN pip install python-twitter

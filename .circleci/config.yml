@@ -1,0 +1,45 @@
+version: 2
+jobs:
+  build:
+    working_directory: /twitlib
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              pytest \
+              pytest-mock \
+              pytest-timeout
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/twitlib.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/twitlib.tar | true
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build --cache-from=twitlib -t twitlib .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/twitlib.tar twitlib:test
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/twitlib.tar
+      - run:
+          name: Run tests
+          command: |
+            docker run -v /test:/test --entrypoint pytest

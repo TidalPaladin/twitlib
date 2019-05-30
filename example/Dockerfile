@@ -1,4 +1,4 @@
-FROM twitlib
+FROM tidalpaladin/twitlib:stable
 
 ADD flags.py /
 ADD main.py /

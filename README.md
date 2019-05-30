@@ -2,8 +2,7 @@
 
 <h2 align="center">
   <a href="https://circleci.com/gh/TidalPaladin/twitlib">
-    <img alt="CircleCI"
-		src="https://circleci.com/gh/TidalPaladin/twitlib.svg?style=svg" />
+    <img alt="CircleCI" src="https://circleci.com/gh/TidalPaladin/twitlib.svg?style=svg" />
   </a>
 </h2>
 

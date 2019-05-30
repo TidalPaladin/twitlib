@@ -5,17 +5,14 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm --force {} +
 
 build:
-	docker build \
-		--file=./twitlib/Dockerfile \
+	cd twitlib && docker build \
 		--tag=twitlib ./
 
 test: build
-	docker build \
-		--file=./test/Dockerfile \
-		--tag=twitlib:test ./
 	docker run \
 		--detach=false \
-		twitlib:test \
+		twitlib \
+		pytest /test \
 		$(pyflags)
 
 doc:

@@ -1,3 +1,5 @@
+.PHONY: build run repl auth help
+
 build:
 	docker build \
 		--tag=twitlib:example ./
@@ -11,6 +13,12 @@ run: build
 		--dry_run \
 		--mock_posts \
 		--track=python
+
+repl: build
+	docker run \
+		--detach=false \
+		--env-file=secrets.env \
+		twitlib:example
 
 auth:
 	docker run \

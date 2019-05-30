@@ -126,27 +126,27 @@ def main(argv):
     del argv
 
     if FLAGS.auth:
-        logging.info('Starting authentication flow')
-        get_access_token(consumer_key, consumer_secret)
-        logging.info('Authentication done, exiting...')
+        authenticate()
         sys.exit()
-
-    logging.info('Key: %s', api._consumer_key)
-    logging.info('Auth Key: %s', api._access_token_key)
-
-    user = api.VerifyCredentials()
-    logging.info('User: %s', user.__repr__())
-
 
     if FLAGS.mock_posts:
         logging.info('Mocking API calls')
         mock_api()
 
+    logging.info('Key: %s', api._consumer_key)
+    logging.info('Auth Key: %s', api._access_token_key)
+    user = api.VerifyCredentials()
+    logging.info('User: %s', user.__repr__())
+
     while True:
         logging.info('Starting stream')
+
+        # Track keywords/hashtags
         if FLAGS.track:
             logging.info('track=%s', FLAGS.track)
             stream(track=FLAGS.track)
+
+        # Follow a user ID
         elif FLAGS.follow:
             logging.info('follow=%s', FLAGS.follow)
             stream(follow=FLAGS.follow)

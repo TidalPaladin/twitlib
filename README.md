@@ -1,5 +1,12 @@
 # Twitlib
 
+<h2 align="center">
+  <a href="https://circleci.com/gh/TidalPaladin/twitlib">
+    <img alt="CircleCI"
+		src="https://circleci.com/gh/TidalPaladin/twitlib.svg?style=svg" />
+  </a>
+</h2>
+
 Twitlib is a python library that helps automate the management of a
 Twitter account. It was specifically designed to receive and
 manipulate tweets from Twitter's streaming API using a thread pool

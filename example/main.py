@@ -3,7 +3,7 @@ import os
 import sys
 
 import twitter
-from twitter import Api, User
+from twitter import Api, User, Status
 from unittest import mock
 from absl import app, logging
 from flags import FLAGS
@@ -54,6 +54,12 @@ def mock_api():
             side_effect=update_side_effect
     )
 
+def mirror_filters():
+    return [
+            MirrorThread.default_filter,
+            lambda status : not status.quoted_status,
+    ]
+
 def spawn_writer(index):
         return WriterThread(
                 dirname=FLAGS.dir,
@@ -75,7 +81,8 @@ def spawn_mirror(index):
                 api=api,
                 temp_dir=os.path.join(FLAGS.dir, 'tmp'),
                 dry_run=FLAGS.dry_run,
-                name='MT-%i' % index
+                name='MT-%i' % index,
+                filters=mirror_filters()
         )
 
 def get_dispatcher():

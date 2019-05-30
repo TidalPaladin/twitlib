@@ -117,6 +117,11 @@ def stream(**kwargs):
         else:
             listener.on_status(status)
 
+def authenticate():
+    logging.info('Starting authentication flow')
+    get_access_token(consumer_key, consumer_secret)
+    logging.info('Authentication done, exiting...')
+
 def main(argv):
     del argv
 

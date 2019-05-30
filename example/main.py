@@ -96,19 +96,15 @@ def get_dispatcher():
     return Dispatcher(threads=threads)
 
 def stream(**kwargs):
+    logging.info('Starting workers, dry_run=%s', FLAGS.dry_run)
 
-    logging.info('Starting workers, dir=%s, dry_run=%s', FLAGS.dir, FLAGS.dry_run)
-
-    # Spin up writer thread pool
+    # Spin up thread pool
     threads = []
     for i in range(FLAGS.workers):
-
         if FLAGS.download:
             spawn_downloader().start()
-
         if FLAGS.mirror:
             spawn_mirror().start()
-
         if FLAGS.writer:
             spawn_writer().start()
 

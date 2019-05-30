@@ -11,10 +11,10 @@ flags.DEFINE_bool(
     'Carry out authentication flow and exit'
 )
 
-DEFAULT_ID = os.environ.get('TWITTER_ID', None)
+DEFAULT_ID = os.environ.get('TWITTER_ID', [])
 flags.DEFINE_list(
     'follow',
-    DEFAULT_ID if DEFAULT_ID else [],
+    [],
     'List of screen names to follow'
 )
 

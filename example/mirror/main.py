@@ -52,7 +52,9 @@ def update_side_effect(*args, **kwargs):
 def mirror_filters():
     return [
             MirrorThread.default_filter,
+            lambda status : tweeted_by(status, twitter_id),
             lambda status : not status.quoted_status,
+            lambda status : has_hashtag(status, HASHTAG, ignore_case=True)
     ]
 
 def spawn_mirror(index):

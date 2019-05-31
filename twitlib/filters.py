@@ -1,7 +1,4 @@
-import re
 from twitter import Status
-
-RTGAME_REGEX = re.compile('(rt|retweet).?game', re.IGNORECASE)
 
 def is_reply(status):
     if status.in_reply_to_user_id:
@@ -21,11 +18,6 @@ def is_retweet(status):
 
 def has_media(status):
     return bool(status.media)
-
-def is_rt_game(status):
-    text = status.full_text if status.full_text else status.text
-    match = RTGAME_REGEX.search(text)
-    return match is not None
 
 def has_hashtag(status, tag_name, ignore_case=False):
     if not status.hashtags:

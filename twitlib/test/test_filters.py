@@ -2,38 +2,6 @@ import pytest
 import twitlib.filters as filters
 from twitter import User, Media, Hashtag
 
-class TestRTGame():
-
-    @pytest.fixture
-    def text_format(self):
-        return 'Test text\n {inject} test #hashtag'
-
-    @pytest.fixture(params=[
-        'rtGame',
-        'RTGame',
-        'RT GAME',
-        'retweet game',
-        'rt game',
-        'Retweet Game'
-    ])
-    def match_text(self, text_format, request):
-        inject = request.param
-        return text_format.format(inject=inject)
-
-    @pytest.fixture
-    def no_match_text(self, text_format):
-        return text_format.format(inject='')
-
-    def test_positive_match(self, mocker, status, match_text):
-        type(status).text = mocker.PropertyMock(return_value=match_text)
-        match = filters.is_rt_game(status)
-        assert(match)
-
-    def test_negative_match(self, mocker, status, no_match_text):
-        type(status).text = mocker.PropertyMock(return_value=no_match_text)
-        match = filters.is_rt_game(status)
-        assert(not match)
-
 class TestIsReply():
 
     @pytest.fixture(params=[100, None], ids=['user', 'nouser'])

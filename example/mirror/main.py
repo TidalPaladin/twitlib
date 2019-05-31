@@ -36,7 +36,8 @@ api = Api(
     input_encoding='utf-32'
 )
 
-twitter_id = os.environ.get('TWITTER_ID', None)
+HASHTAG='DUP'
+twitter_id = int(os.environ.get('TWITTER_ID', -1))
 
 
 def mock_api():

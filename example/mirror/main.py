@@ -72,7 +72,7 @@ def stream(**kwargs):
     # Spin up thread pool
     threads = []
     for i in range(FLAGS.workers):
-        spawn_mirror().start()
+        spawn_mirror(i).start()
 
     # Connect listener to stream and filter
     listener = Dispatcher(threads=[MirrorThread])

@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    working_directory: /twitlib
     docker:
       - image: docker:18.06.3-ce-git
     steps:
@@ -30,7 +29,7 @@ jobs:
               --tag twitlib \
               --target test \
               --build-arg cache=$(date +%Y-%m-%d:%H%M:%s)  \
-              ./twitlib
+              .
       - run:
           name: Save Docker image layer cache
           command: |
@@ -43,8 +42,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -v ./:/cov twitlib
+            docker run -v /:/cov twitlib
       - run:
           name: Upload codecov report
           command: |
-            bash <(curl -s https://codecov.io/bash)
+            codecov -f coverage.xml

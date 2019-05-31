@@ -7,6 +7,12 @@ clean-pyc:
 build:
 	cd twitlib && docker build \
 		--tag=twitlib ./
+	cd example/comprehensive && docker build \
+		-t twitlib:base-example \
+		./
+	cd example/mirror && docker build \
+		-t twitlib:mirror \
+		./
 
 test: build
 	docker run \
@@ -14,12 +20,6 @@ test: build
 		twitlib \
 		pytest /test \
 		$(pyflags)
-	cd example/comprehensive && docker build \
-		-t twitlib:base-example \
-		./
-	cd example/mirror && docker build \
-		-t twitlib:mirror \
-		./
 
 doc:
 	docker run \

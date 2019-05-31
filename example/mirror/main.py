@@ -7,6 +7,7 @@ from twitter import Api, User, Status
 from absl import app, logging
 from flags import FLAGS
 from logging import Formatter
+from unittest import mock
 
 from twitlib.util import *
 from twitlib.streaming import Dispatcher, MirrorThread
@@ -36,6 +37,16 @@ api = Api(
 )
 
 twitter_id = os.environ.get('TWITTER_ID', None)
+
+
+def mock_api():
+    api.PostUpdate = mock.Mock(
+            return_value=twitter.Status(),
+            side_effect=update_side_effect
+    )
+
+def update_side_effect(*args, **kwargs):
+    logging.info('PostUpdate(), called args=%s, kwargs=%s', args, kwargs)
 
 def mirror_filters():
     return [
@@ -75,6 +86,10 @@ def main(argv):
     logging.info('Auth Key: %s', api._access_token_key)
     user = api.VerifyCredentials()
     logging.info('User: %s', user.__repr__())
+
+    if FLAGS.mock_posts:
+        logging.info('Mocking API calls')
+        mock_api()
 
     while True:
         logging.info('Starting stream')

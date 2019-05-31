@@ -42,8 +42,9 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -v /:/cov twitlib
+            mkdir /cov
+            docker run -v /cov:/cov twitlib
       - run:
           name: Upload codecov report
           command: |
-            codecov -f coverage.xml
+            cd /cov && codecov

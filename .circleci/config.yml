@@ -7,6 +7,11 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=18.1-r0
+            pip install codecov==2.0.15
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
@@ -20,7 +25,12 @@ jobs:
       - run:
           name: Build application Docker image
           command: |
-            docker build --cache-from=twitlib -t twitlib ./twitlib
+            docker build \
+              --cache-from=twitlib  \
+              --tag twitlib \
+              --target test \
+              --build-arg cache=$(date +%Y-%m-%d:%H%M:%s)  \
+              ./twitlib
       - run:
           name: Save Docker image layer cache
           command: |
@@ -33,4 +43,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run twitlib pytest /test
+            docker run -v ./:/cov twitlib
+      - run:
+          name: Upload codecov report
+          command: |
+            bash <(curl -s https://codecov.io/bash)

@@ -2,13 +2,13 @@
 
 build:
 	docker build \
-		--tag=twitlib:example ./
+		--tag=twitlib:base-example ./
 
 run: build
 	docker run \
 		--detach=false \
 		--env-file=secrets.env \
-		twitlib:example \
+		twitlib:base-example \
 		--mirror \
 		--dry_run \
 		--mock_posts \
@@ -18,18 +18,18 @@ repl: build
 	docker run \
 		--detach=false \
 		--env-file=secrets.env \
-		twitlib:example
+		twitlib:base-example
 
 auth:
 	docker run \
 		--detach=false \
 		--env-file=secrets.env \
-		twitlib:example \
+		twitlib:base-example \
 		--auth
 
 help:
 	docker run \
 		--detach=false \
 		--env-file=secrets.env \
-		twitlib:example \
+		twitlib:base-example \
 		--helpfull

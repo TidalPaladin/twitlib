@@ -45,6 +45,7 @@ jobs:
           command: |
             mkdir cov
             docker run -v /app/cov:/cov twitlib
+            ls cov
       - run:
           name: Upload codecov report
           command: |

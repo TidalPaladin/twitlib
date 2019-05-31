@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_dir: app
     docker:
       - image: docker:18.06.3-ce-git
     steps:
@@ -47,4 +48,4 @@ jobs:
       - run:
           name: Upload codecov report
           command: |
-            cd /cov && codecov
+            codecov

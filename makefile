@@ -7,14 +7,22 @@ clean:
 
 build:
 	docker build --tag=twitlib --target=base .
+	docker build \
+		--tag=twitlib:test \
+		--build-arg cache=$(shell date +%Y-%m-%d:%H%M:%s)  \
+		.
 
 build-example: build
 	docker build -t twitlib:base-example ./example/comprehensive
 	docker build -t twitlib:mirror ./example/mirror
 
-test: build
-	docker build --tag=twitlib:test .
-	docker run -it twitlib:test \
+test:
+	docker run -it \
+		-v $(PWD)/test:/test \
+		-v $(PWD)/twitlib:/twitlib \
+		twitlib:test \
+		--cov=/twitlib \
+		${pytest_args} /test
 
 doc:
 	docker run \

@@ -320,7 +320,6 @@ class MirrorThread(WorkerThread):
             log.info('Mirroring tweet %i', status.id)
             return MirrorThread.mirror(self.api, status, self.temp_dir)
 
-
     @staticmethod
     def mirror(api: Api, status: Status, temp_dir: str = '') -> Status:
         """Mirror a status. Returns a Status object with the newly posted tweet"""
@@ -328,7 +327,6 @@ class MirrorThread(WorkerThread):
         text = util.remove_urls(text)
         media = MediaDownloaderThread.download_media(status, temp_dir)
         return api.PostUpdate(status=text, media=media)
-
 
     @staticmethod
     def default_filter(status: Status):

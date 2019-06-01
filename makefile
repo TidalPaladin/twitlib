@@ -6,18 +6,15 @@ clean:
 	find . -wholename '*/.pytest_cache' -exec rm --force {} +
 
 build:
-	docker build --tag=twitlib ./twitlib
+	docker build --tag=twitlib --target=base .
 
 build-example: build
 	docker build -t twitlib:base-example ./example/comprehensive
 	docker build -t twitlib:mirror ./example/mirror
 
 test: build
-	docker build --tag=twitlib:test ./test
+	docker build --tag=twitlib:test .
 	docker run -it twitlib:test \
-		--cov=/twitlib \
-		$(pyflags) \
-		/test
 
 doc:
 	docker run \

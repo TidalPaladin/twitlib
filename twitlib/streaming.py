@@ -511,12 +511,10 @@ class Dispatcher(BaseListener):
         super().__init__()
 
     @property
-    def threads(self) -> List[WorkerThread]:
-        return self._threads
+    def threads(self) -> List[WorkerThread]: return self._threads
 
     @threads.setter
-    def threads(self, val: List[WorkerThread]):
-        self._threads = val
+    def threads(self, val: List[WorkerThread]): self._threads = val
 
     def on_status(self, status: Type[Status]) -> None:
         """Adds status to queue of listening WorkerThreads"""

@@ -245,13 +245,6 @@ class WriterThread(WorkerThread):
         Write a status as a JSON object to a given file. Keyword args are
         forwarded to json.dump()
         """
-        if not isinstance(status, Status):
-            log.exception('Unexpected type for status: %s', type(status))
-            raise TypeError
-        if not isinstance(filename, str):
-            log.exception('Unexpected type for fmt: %s', type(filename))
-            raise TypeError
-
         with open(filename, 'w', encoding='utf-32') as f:
             json.dump(status.AsDict(), f, indent=2, sort_keys=True)
 

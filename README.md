@@ -4,6 +4,9 @@
   <a href="https://circleci.com/gh/TidalPaladin/twitlib">
     <img alt="CircleCI" src="https://circleci.com/gh/TidalPaladin/twitlib.svg?style=svg" />
   </a>
+	<a href="https://codecov.io/gh/TidalPaladin/twitlib">
+		<img src="https://codecov.io/gh/TidalPaladin/twitlib/branch/master/graph/badge.svg" />
+	</a>
 </h2>
 
 Twitlib is a python library that helps automate the management of a

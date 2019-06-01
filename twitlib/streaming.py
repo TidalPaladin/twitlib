@@ -313,17 +313,11 @@ class MirrorThread(WorkerThread):
     @staticmethod
     def mirror(api: Api, status: Status, temp_dir: str = '') -> Status:
         """Mirror a status. Returns a Status object with the newly posted tweet"""
+        text = status.full_text if status.full_text else status.text
+        text = util.remove_urls(text)
+        media = MediaDownloaderThread.download_media(status, temp_dir)
+        return api.PostUpdate(status=text, media=media)
 
-        try:
-            text = status.full_text if status.full_text else status.text
-            text = util.remove_urls(text)
-            media = MediaDownloaderThread.download_media(status, temp_dir)
-            return api.PostUpdate(status=text, media=media)
-
-        except RuntimeError:
-            raise
-
-        return None
 
     @staticmethod
     def default_filter(status: Status):

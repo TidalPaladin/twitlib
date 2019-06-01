@@ -63,22 +63,24 @@ class WorkerThread(Thread):
         super().__init__(daemon=daemon, **kwargs)
 
     @property
-    def filters(self) -> List[FilterFunc]:
-        return self._filters
+    def filters(self) -> List[FilterFunc]: return self._filters
 
     @filters.setter
-    def filters(self, funcs: List[FilterFunc]) -> None:
-        self._filters = funcs
+    def filters(self, funcs: List[FilterFunc]) -> None: self._filters = funcs
 
     @property
-    def loops(self) -> int:
-        return self._loops
+    def loops(self) -> int: return self._loops
 
     @loops.setter
     def loops(self, val: int) -> None:
         if val <= 0:
             raise ValueError('loops must be an int > 0')
         self._loops = val
+    @property
+    def dry_run(self) -> bool: return self._dry_run
+
+    @dry_run.setter
+    def dry_run(self, val: bool) -> None: self._dry_run = val
 
     def run(self) -> None:
         """
@@ -210,8 +212,19 @@ class WriterThread(WorkerThread):
         for attr, default in default_args.items():
             val = kwargs.pop(attr, default)
             setattr(self, attr, val)
-
         super().__init__(**kwargs)
+
+    @property
+    def dirname(self) -> str: return self._dirname
+
+    @dirname.setter
+    def dirname(self, val: str) -> None: self._dirname = val
+
+    @property
+    def format(self) -> str: return self._format
+
+    @format.setter
+    def format(self, val: str) -> None: self._format = val
 
     def process_status(self, status: Status) -> str:
         """
@@ -286,6 +299,18 @@ class MirrorThread(WorkerThread):
 
         super().__init__(**kwargs)
 
+    @property
+    def temp_dir(self) -> str: return self._temp_dir
+
+    @temp_dir.setter
+    def temp_dir(self, val: str) -> None: self._temp_dir = val
+
+    @property
+    def api(self) -> str: return self._api
+
+    @api.setter
+    def api(self, val: Api) -> None: self._api = val
+
     def process_status(self, status: Status) -> Status:
         """
         Override for WorkerThread.process_status(). Performs the following actions:
@@ -357,8 +382,19 @@ class MediaDownloaderThread(WorkerThread):
         for attr, default in default_args.items():
             val = kwargs.pop(attr, default)
             setattr(self, attr, val)
-
         super().__init__(**kwargs)
+
+    @property
+    def dirname(self) -> str: return self._dirname
+
+    @dirname.setter
+    def dirname(self, val: str) -> None: self._dirname = val
+
+    @property
+    def format(self) -> str: return self._format
+
+    @format.setter
+    def format(self, val: str) -> None: self._format = val
 
     def process_status(self, status: Status):
         """

@@ -145,11 +145,6 @@ class WorkerThread(Thread):
         """
         cls.QUEUE.put(status, block=True, timeout=None, **kwargs)
 
-    @classmethod
-    def queue_empty(cls) -> bool:
-        """Returns true if the job queue is empty"""
-        return cls.QUEUE.empty()
-
     def process_status(self, status: Status) -> NoReturn:
         """
         Called whenever a job is pulled from the class job queue. Override this in

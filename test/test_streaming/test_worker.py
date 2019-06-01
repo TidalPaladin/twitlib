@@ -6,42 +6,6 @@ from twitlib.streaming import WorkerThread
 
 THREAD_WAIT = 0.1
 
-@pytest.mark.usefixtures('dequeue_once')
-class TestExceptions():
-
-    @pytest.fixture
-    def dequeue_once(self, mock_queue):
-        def side_effect():
-            mock_queue.get.return_value=None
-        mock_queue.task_done.side_effect=side_effect
-
-    @pytest.fixture(params=[Exception, IOError, TypeError])
-    def handled_exception(self, mocker, worker, request):
-        mocker.patch.object(worker, 'process_status', side_effect=request.param)
-        return request.param
-
-    @pytest.fixture(params=[KeyboardInterrupt, SystemExit])
-    def unhandled_exception(self, mocker, worker, request):
-        mocker.patch.object(worker, 'process_status', side_effect=request.param)
-        return request.param
-
-    def test_process_call_raises(self, base_worker, status):
-        with pytest.raises(NotImplementedError):
-            base_worker.process_status(status)
-
-    @pytest.mark.timeout(THREAD_WAIT, method='signal')
-    def test_handled_exception(self, worker, handled_exception):
-        """Test exceptions that should be caught by WorkerThread.run()"""
-        worker.run()
-        worker.process_status.assert_called()
-
-    @pytest.mark.timeout(THREAD_WAIT, method='signal')
-    def test_unhandled_exception(self, worker, unhandled_exception):
-        """Test exceptions that should not be caught by WorkerThread.run()"""
-        with pytest.raises(unhandled_exception):
-            worker.run()
-
-
 class TestWorker():
     """Parameterized to test all worker classes"""
 
@@ -80,7 +44,8 @@ class TestWorker():
 
     def test_default_filter_returns_true(self, status):
         filter_ret = WorkerThread.default_filter(status)
-        assert(filter_ret)
+        assert(filter_ret == True)
+
 
 @pytest.mark.timeout(THREAD_WAIT, method='signal')
 class TestQueue():
@@ -101,3 +66,27 @@ class TestQueue():
     def test_dequeue_value(mocker, worker_class, status):
         item = worker_class.dequeue()
         assert(item == status)
+
+@pytest.mark.usefixtures('dequeue_once')
+class TestExceptions():
+
+    @pytest.fixture
+    def dequeue_once(self, mock_queue):
+        def side_effect():
+            mock_queue.get.return_value=None
+        mock_queue.task_done.side_effect=side_effect
+
+    @pytest.fixture(params=[KeyboardInterrupt, SystemExit])
+    def unhandled_exception(self, mocker, worker, request):
+        mocker.patch.object(worker, 'process_status', side_effect=request.param)
+        return request.param
+
+    def test_process_call_raises(self, base_worker, status):
+        with pytest.raises(NotImplementedError):
+            base_worker.process_status(status)
+
+    @pytest.mark.timeout(THREAD_WAIT, method='signal')
+    def test_unhandled_exception(self, worker, unhandled_exception):
+        """Test exceptions that should not be caught by WorkerThread.run()"""
+        with pytest.raises(unhandled_exception):
+            worker.run()

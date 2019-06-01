@@ -3,6 +3,7 @@ import logging
 import json
 import requests
 import twitter
+import os
 
 from twitlib.streaming import WorkerThread
 from twitlib.streaming import MirrorThread, WriterThread, MediaDownloaderThread
@@ -61,6 +62,12 @@ class TestDownload():
         expected = media_outputs
         actual = MediaDownloaderThread.download_media(status, dirname)
         assert(expected == actual)
+
+    def test_mkdir_on_missing(self, mocker, status, dirname, mock_open):
+        os.path.exists.return_value = False
+        MediaDownloaderThread.download_media(status, dirname)
+        os.path.exists.assert_called_once()
+        os.makedirs.assert_called_once_with(dirname)
 
 @pytest.mark.usefixtures('patch_remove_urls', 'remove_media')
 class TestMirrorNoMedia():

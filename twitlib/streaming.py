@@ -31,7 +31,7 @@ class WorkerThread(Thread):
 
     QUEUE: ClassVar[Queue] = Queue()
 
-    def __init__(self, **kwargs):
+    def __init__(self, loops=None, dry_run=False, **kwargs):
         """
         Worker thread base class constructor. Follows the `threading.Thread`
         paradigm of accepting only keyword arguments.
@@ -49,15 +49,9 @@ class WorkerThread(Thread):
         **kwargs :
             Forwarded to threading.Thread constructor
         """
-
-        default_args = {
-                'loops': None,
-                'dry_run' : False,
-                'filters': [self.default_filter],
-        }
-        for attr, default in default_args.items():
-            val = kwargs.pop(attr, default)
-            setattr(self, '_'+attr, val)
+        self.loops = loops
+        self.dry_run = dry_run
+        self.filters = kwargs.pop('filters', [self.default_filter])
 
         # Default to daemon thread for worker
         daemon = kwargs.pop('daemon', True)
@@ -202,16 +196,9 @@ class WriterThread(WorkerThread):
 
     QUEUE: ClassVar[Queue] = Queue()
 
-    def __init__(self, **kwargs):
-
-
-        default_args = {
-                'dirname': '',
-                'format': 'status_{id}.json',
-        }
-        for attr, default in default_args.items():
-            val = kwargs.pop(attr, default)
-            setattr(self, attr, val)
+    def __init__(self, dirname='', format='status_{id}.json', **kwargs):
+        self.dirname = dirname
+        self.format = format
         super().__init__(**kwargs)
 
     @property
@@ -371,15 +358,9 @@ class MediaDownloaderThread(WorkerThread):
 
     QUEUE: ClassVar[Queue] = Queue()
 
-    def __init__(self, **kwargs):
-
-        default_args = {
-                'dirname': '',
-                'format': 'media_{id}.json',
-        }
-        for attr, default in default_args.items():
-            val = kwargs.pop(attr, default)
-            setattr(self, attr, val)
+    def __init__(self, dirname='', format='media_{id}.json', **kwargs):
+        self.dirname=dirname
+        self.format=format
         super().__init__(**kwargs)
 
     @property

@@ -72,10 +72,12 @@ class WorkerThread(Thread):
     def loops(self) -> int: return self._loops
 
     @loops.setter
-    def loops(self, val: int) -> None:
-        if val <= 0:
+    def loops(self, val: Union[int, None]) -> None:
+        if val == None or val > 0:
+            self._loops = val
+        else:
             raise ValueError('loops must be an int > 0')
-        self._loops = val
+
     @property
     def dry_run(self) -> bool: return self._dry_run
 

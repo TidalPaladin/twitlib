@@ -12,6 +12,12 @@ class TestWorker():
     def test_daemon_default(self, worker):
         assert(worker.daemon)
 
+    def test_run(self, mocker, worker, status):
+        m = mocker.patch.object(worker, 'process_status')
+        worker.loops = 1
+        worker.run()
+        m.assert_called_once_with(status)
+
     @pytest.mark.timeout(THREAD_WAIT, method='signal')
     def test_kill_no_process(self, worker, mocker):
         mocker.patch.object(WorkerThread, 'dequeue', return_value=None)
@@ -45,6 +51,7 @@ class TestWorker():
     def test_default_filter_returns_true(self, status):
         filter_ret = WorkerThread.default_filter(status)
         assert(filter_ret == True)
+
 
 
 @pytest.mark.timeout(THREAD_WAIT, method='signal')

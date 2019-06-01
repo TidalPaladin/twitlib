@@ -1,15 +1,6 @@
 import json
 import re
 
-def pretty_model(model, **kwargs):
-    json_str = json.dumps(
-        model._json,
-        indent=2,
-        sort_keys=True,
-        **kwargs
-    )
-    return json_str
-
 def list_media(status):
     """
     Lists media URLs in a twitter.Status object
@@ -35,14 +26,3 @@ def remove_urls(text):
     """
     text = re.sub(r"https://t.co\S+", "", text)
     return re.sub(r"\s+", " ", text)
-
-def display_text(status):
-
-    # Pull correct text
-    if status.tweet_mode == 'extended':
-        text = status.full_text
-    else:
-        text = status.text
-
-    # Pull correct text
-    return text

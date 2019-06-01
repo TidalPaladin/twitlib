@@ -36,7 +36,7 @@ class TestDryRun():
 
     @pytest.fixture
     def dry_run(self, mocker, subworker):
-        type(subworker).dry_run = mocker.PropertyMock(return_value=True)
+        subworker.dry_run = True
 
     def test_dry_run_respected(self, subworker, status, static_func):
         assert(subworker.dry_run)

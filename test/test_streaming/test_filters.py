@@ -77,3 +77,10 @@ class TestMirrorDefault():
         valid = MirrorThread.default_filter(status)
         assert(status.in_reply_to_user_id)
         assert(not valid)
+
+class TestDownloaderDefault():
+
+    def test_uses_writer_default(self, status, mocker):
+        m = mocker.patch('twitlib.streaming.WriterThread.default_filter')
+        MediaDownloaderThread.default_filter(status)
+        m.assert_called_once_with(status)

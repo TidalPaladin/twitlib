@@ -38,7 +38,7 @@ class TestConstructors():
         Thread.__init__.assert_called_once_with(name=name, daemon=daemon)
 
     arg_specs = {
-        'loops' : int,
+        'loops' : 10,
         'filters' : list,
         'dirname' : str,
         'dry_run' : bool,
@@ -51,7 +51,10 @@ class TestConstructors():
     def mock_kwarg(self, mocker, request):
         key = request.param
         val = self.arg_specs[key]
-        return key, mocker.Mock(name=key, spec=val)
+        if type(val) == type:
+            return key, mocker.Mock(name=key, spec=val)
+        else:
+            return key, val
 
     @pytest.fixture
     def has_attr(self, thread, mock_kwarg):

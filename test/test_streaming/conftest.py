@@ -30,8 +30,6 @@ def mock_args(dirname, api, mocker):
         'temp_dir' : 'temp'+dirname,
         'format' : 'status_%(id)s.json',
     }
-    for k, v in mock_args.items():
-        mock_args[k] = mocker.PropertyMock(return_value=v)
     return mock_args
 
 @pytest.fixture(params=[
@@ -55,21 +53,21 @@ def worker_subclass(request):
 def base_worker(mock_args):
     result = WorkerThread()
     for k, v in mock_args.items():
-        setattr(type(result), k, v)
+        setattr(result, k, v)
     return result
 
 @pytest.fixture
 def worker(mocker, worker_class, mock_args):
     result = worker_class()
     for k, v in mock_args.items():
-        setattr(type(result), k, v)
+        setattr(result, k, v)
     return result
 
 @pytest.fixture
 def subworker(mocker, worker_subclass, mock_args):
     result = worker_subclass()
     for k, v in mock_args.items():
-        setattr(type(result), k, v)
+        setattr(result, k, v)
     return result
 
 @pytest.fixture

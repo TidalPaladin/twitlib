@@ -1,4 +1,5 @@
 import pytest
+import logging
 
 from twitter import Api
 from test.mocks import *
@@ -41,3 +42,7 @@ def add_media(inject_media, mock_media):
 @pytest.fixture
 def remove_media(inject_media):
     inject_media(None)
+
+@pytest.fixture(autouse=True)
+def use_logs(caplog):
+    caplog.set_level(logging.DEBUG)

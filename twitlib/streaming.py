@@ -88,7 +88,7 @@ class WorkerThread(Thread):
         """
 
         cls = self.__class__.__name__
-        log.debug('{cls} started', cls=cls)
+        log.debug('%s started', cls)
         loop_count = 0
 
         while self.loops == None or loop_count < self.loops:

@@ -2,7 +2,7 @@ import pytest
 import logging
 import json
 import twitter
-from twitlib.streaming import Dispatcher, WorkerThread
+from twitlib.streaming import BaseListener, Dispatcher, WorkerThread
 
 LOG = 'twitlib'
 
@@ -10,6 +10,31 @@ LOG = 'twitlib'
 #               DISPATCHER TESTS
 #######################################################################
 
+@pytest.mark.usefixtures('mock_queue')
+class TestBaseListener():
+    """Only tests no errors and correct function signature"""
+
+    @pytest.fixture
+    def listener(self):
+        return BaseListener()
+
+    def test_on_connect(self, listener):
+        listener.on_connect()
+
+    def test_on_status(self, status, listener):
+        listener.on_status(status)
+
+    def test_on_direct_message(self, status, listener):
+        listener.on_direct_message(status)
+
+    def test_on_limit(self, listener):
+        listener.on_limit()
+
+    def test_on_timeout(self, listener):
+        listener.on_timeout()
+
+    def test_on_error(self, listener):
+        listener.on_error(100)
 
 @pytest.mark.usefixtures('mock_queue')
 class TestDispatcher():

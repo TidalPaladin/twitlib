@@ -496,17 +496,14 @@ class BaseListener():
     def on_direct_message(self, status) -> None:
         log.info('Got direct message')
 
-    def on_limit(self, status: Status) -> None:
+    def on_limit(self) -> None:
         log.warning('Got limit message')
 
-    def on_timeout(self, status: Status) -> None:
+    def on_timeout(self) -> None:
         log.warning('Stream timeout')
 
     def on_error(self, status_code: int) -> Union[bool, None]:
         log.error('Got error code %i', status_code)
-        if status_code == 429:
-            return False
-        return None
 
 class Dispatcher(BaseListener):
     """
@@ -535,3 +532,9 @@ class Dispatcher(BaseListener):
 
         for thread_cls in self.threads:
             thread_cls.enqueue(status)
+
+    def on_error(self, status_code: int) -> Union[bool, None]:
+        super().on_error(status_code)
+        if status_code == 429:
+            return False
+        return None

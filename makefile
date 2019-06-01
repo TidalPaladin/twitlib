@@ -1,25 +1,23 @@
-.PHONY: build doc test clean-pyc
+.PHONY: build build-example doc test clean
 
-clean-pyc:
+clean:
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
+	find . -wholename '*/.pytest_cache' -exec rm --force {} +
 
 build:
-	cd twitlib && docker build \
-		--tag=twitlib ./
-	cd example/comprehensive && docker build \
-		-t twitlib:base-example \
-		./
-	cd example/mirror && docker build \
-		-t twitlib:mirror \
-		./
+	docker build --tag=twitlib ./twitlib
+
+build-example: build
+	docker build -t twitlib:base-example ./example/comprehensive
+	docker build -t twitlib:mirror ./example/mirror
 
 test: build
-	docker run \
-		--detach=false \
-		twitlib \
-		pytest /test \
-		$(pyflags)
+	docker build --tag=twitlib:test ./test
+	docker run -it twitlib:test \
+		--cov=/twitlib \
+		$(pyflags) \
+		/test
 
 doc:
 	docker run \

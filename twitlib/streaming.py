@@ -52,6 +52,7 @@ class WorkerThread(Thread):
 
         default_args = {
                 'loops': None,
+                'dry_run' : False,
                 'filters': [self.default_filter],
         }
         for attr, default in default_args.items():
@@ -203,10 +204,10 @@ class WriterThread(WorkerThread):
 
     def __init__(self, **kwargs):
 
+
         default_args = {
                 'dirname': '',
                 'format': 'status_{id}.json',
-                'dry_run': False
         }
         for attr, default in default_args.items():
             val = kwargs.pop(attr, default)
@@ -289,7 +290,6 @@ class MirrorThread(WorkerThread):
 
         default_args = {
                 'api': Api(),
-                'dry_run': False,
                 'temp_dir': '',
         }
         for attr, default in default_args.items():
@@ -376,7 +376,6 @@ class MediaDownloaderThread(WorkerThread):
         default_args = {
                 'dirname': '',
                 'format': 'media_{id}.json',
-                'dry_run': False
         }
         for attr, default in default_args.items():
             val = kwargs.pop(attr, default)

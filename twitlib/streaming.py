@@ -107,12 +107,9 @@ class WorkerThread(Thread):
                 self.process_status(status)
                 log.debug('%s finished job', cls)
 
-            except NotImplementedError:
-                log.exception('%s exception in job', cls)
-                raise
-
             except Exception:
                 log.exception('Exception on status: %s', status.__repr__())
+                raise
 
             finally:
                 self.__class__.QUEUE.task_done()

@@ -43,9 +43,13 @@ jobs:
       - run:
           name: Run tests
           command: |
-            mkdir cov
-            docker run -v /app/cov:/cov twitlib
-            ls cov
+            set +o pipefail
+            docker rm twitlib-test | true
+            docker run --name=twitlib-test twitlib
+      - run:
+          name: Copy coverage.xml artifact
+          command: |
+            docker cp twitlib-test:/cov/coverage.xml ./
       - run:
           name: Upload codecov report
           command: |

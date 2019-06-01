@@ -90,3 +90,13 @@ class TestExceptions():
         """Test exceptions that should not be caught by WorkerThread.run()"""
         with pytest.raises(unhandled_exception):
             worker.run()
+
+    @pytest.mark.timeout(THREAD_WAIT, method='signal')
+    def test_task_done_called(self, worker, unhandled_exception):
+        """Test exceptions that should not be caught by WorkerThread.run()"""
+        try:
+            worker.run()
+        except:
+            pass
+        finally:
+            worker.QUEUE.task_done.assert_called_once()

@@ -78,6 +78,10 @@ class TestWorker():
         WorkerThread.format_filename(status, mock_format, dirname)
         mock_format.format.assert_called_once_with(**kwargs)
 
+    def test_default_filter_returns_true(self, status):
+        filter_ret = WorkerThread.default_filter(status)
+        assert(filter_ret)
+
 @pytest.mark.timeout(THREAD_WAIT, method='signal')
 class TestQueue():
     """Parameterized to test all worker classes"""

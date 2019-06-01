@@ -3,7 +3,7 @@
 clean:
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
-	find . -wholename '*/.pytest_cache' -exec rm --force {} +
+	find . -wholename '*/.pytest_cache' -exec rm -rf {} +
 
 build:
 	docker build --tag=twitlib --target=base .

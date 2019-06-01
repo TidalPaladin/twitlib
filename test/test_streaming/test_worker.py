@@ -107,3 +107,10 @@ class TestExceptions():
             pass
         finally:
             worker.QUEUE.task_done.assert_called_once()
+
+    @pytest.mark.timeout(THREAD_WAIT, method='signal')
+    def test_logged_exception(self, mocker, worker):
+        """Test exceptions that should not be caught by WorkerThread.run()"""
+        mocker.patch.object(worker, 'process_status', side_effect=Exception)
+        with pytest.raises(Exception):
+            worker.run()

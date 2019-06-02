@@ -1,6 +1,5 @@
 version: 2.1
 
-
 orbs:
   docker: circleci/docker@0.5.0
   codecov: codecov/codecov@1.0.4
@@ -38,13 +37,6 @@ jobs:
 
 
 workflows:
-  build:
-    jobs:
-      - build_and_test
-      - coverage_upload:
-          requires:
-            - build_and_test
-
   build_and_publish:
     jobs:
       - build_and_test
@@ -54,9 +46,10 @@ workflows:
       - docker/publish:
           requires:
             - build_and_test
-          image: tidalpaladin/twitlib
-          tag: stable
           filters:
             branches:
               only:
                 - master
+          image: tidalpaladin/twitlib
+          tag: stable
+          extra_build_args: '--target=base'

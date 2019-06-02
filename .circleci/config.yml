@@ -23,18 +23,20 @@ jobs:
       - run:
           name: Copy coverage.xml artifact
           command: |
-            docker cp twitlib-test:/cov/coverage.xml ./
+            mkdir -p cov
+            docker cp twitlib-test:/cov/coverage.xml cov/
       - persist_to_workspace:
-          root: workspace
+          root: cov
           paths:
             - coverage.xml
 
   coverage_upload:
     machine: true
     steps:
+      - attach_workspace:
+          at: /tmp/cov
       - codecov/upload:
-          file: coverage.xml
-
+          file: /tmp/cov/coverage.xml
 
 workflows:
   build_and_publish:

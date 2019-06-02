@@ -33,10 +33,15 @@ jobs:
   coverage_upload:
     machine: true
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/cov
+      - run:
+          name: Extract coverage.xml artifact
+          command: |
+            cp /tmp/cov/coverage.xml ./
       - codecov/upload:
-          file: /tmp/cov/coverage.xml
+          file: coverage.xml
 
 workflows:
   build_and_publish:

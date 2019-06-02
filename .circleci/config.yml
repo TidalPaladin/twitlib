@@ -19,7 +19,7 @@ jobs:
           command: |
             set +o pipefail
             docker rm twitlib-test | true
-            docker run --name=twitlib-test twitlib
+            docker run --name=twitlib-test tidalpaladin/twitlib:test
       - run:
           name: Copy coverage.xml artifact
           command: |
